@@ -15,8 +15,12 @@ c = [-2,-2,0,0,0,0]
 A = [[-1,1,1,0],[-1/2,1,0,1]]
 b = [1,2]
 c = [-2,-2,0,0]
+'''
+A = [[-2,1,1,0],[2,-3,0,1]]
+b = [2,6]
+c = [-2,-1,0,0]
 
-
+'''
 # multiplas solucoes otimas
 A = [[1,13/2,-1,0,0],[2,1,0,-1,0],[5,4,0,0,1]]
 b = [5,4,20]
@@ -31,12 +35,17 @@ c = [-1,-3,0,0,0]
 A = [[1,1,1,0,0,0,0],[6,2,0,-1,0,0,0],[1,5,0,0,-1,0,0],[1,0,0,0,0,1,0],[0,1,0,0,0,0,1]]
 b = [4,8,4,3,3]
 c = [2,3,0,0,0,0,0]
-'''
+
 
 # solucao degenerada
 A = [[1,1,1,0,0,0],[1,2,0,1,0,0],[2,1,0,0,1,0],[1,-2,0,0,0,1]]
 b = [10,15,15,1]
 c = [-3,-5,0,0,0,0]
+
+A = [[1,1,1,0,0],[2,1,0,1,0],[1,2,0,0,1]]
+b = [10,15,15]
+c = [-1,-1,0,0,0]
+'''
 
 
 
@@ -49,11 +58,18 @@ print("Vetor c:\n",pl.c)
 
 pl.solveFi()
 
-print("Base:",pl.base)
-print("Não base:",pl.nbase)
+if hasattr(pl, "base"):
+    print("Base:",pl.base)
+if hasattr(pl, "nbase"):
+    print("Não base:",pl.nbase)
 
 
 pl.solve()
 
-print("Vetor x:",pl.x)
-print("Valor ótimo:",pl.fx)
+
+
+if hasattr(pl, "x"):
+    print("Vetor x:",pl.x)
+
+if hasattr(pl, "fx"):
+    print("Valor ótimo:",pl.fx)
