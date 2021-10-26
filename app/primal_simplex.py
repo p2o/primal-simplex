@@ -52,29 +52,28 @@ class PrimalSimplex:
 
     def solveFi(self):
         tamanho_base = self.A.shape[0]
+        A_columns = [i for i in range(self.A.shape[1])]
         self.base = [-1] * tamanho_base
         self.nbase = []
-        matriz_B_to_find = []
-        base_i = 0
-        id_columns = []
-        for i in range(tamanho_base):
-            matriz_B_to_find.append([0] * tamanho_base)
-            matriz_B_to_find[i][i] = 1
-        for col in range(self.A.shape[1]):
-            for n_base in range(len(matriz_B_to_find)):
-                if all(self.A[:, col] == matriz_B_to_find[n_base]):
-                    self.base[base_i] = col
-                    id_columns.append(n_base)
-                    base_i += 1
+        id_columns_found = []
+        matriz_B_to_find = np.identity(tamanho_base)
+
+        for col_B in range(tamanho_base):
+            for col_A in A_columns:
+                if all(self.A[:,col_A] == matriz_B_to_find[:,col_B]):
+                    self.base[len(id_columns_found)] = col_A
+                    id_columns_found.append(col_B)
+                    A_columns.remove(col_A)
                     break
-            if base_i >= tamanho_base:
+            if len(id_columns_found) >= tamanho_base:
                 self.nbase = [i for i in range(self.A.shape[1]) if i not in self.base]
                 break
 
-        if base_i < tamanho_base:
-            columns_to_add = np.asarray([matriz_B_to_find[i] for i in range(tamanho_base) if i not in id_columns]).T
+        if len(id_columns_found) < tamanho_base:
+            columns_to_add = np.asarray([matriz_B_to_find[i] for i in range(tamanho_base) if i not in id_columns_found]).T
             A_aux = np.concatenate((self.A,columns_to_add), axis=1)
             c_aux = np.asarray([0] * self.A.shape[1] + [1] * columns_to_add.shape[1]).reshape(A_aux.shape[1],1)
+            base_i = len(id_columns_found)
             while base_i < tamanho_base:
                 self.base[base_i] = A_aux.shape[1] - tamanho_base + base_i
                 base_i += 1
