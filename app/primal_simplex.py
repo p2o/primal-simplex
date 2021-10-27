@@ -106,10 +106,11 @@ class PrimalSimplex:
         return [self.base, self.nbase]
 
     def solve(self):
+        self.solucao = [0,""]
         if not hasattr(self, "base"):
             self.solveFi()
         if self.A.shape[1] < len(self.base) + len(self.nbase):
-            print("Problema infactivel")
+            self.solucao = [3,"Problema infactivel"]
         else:
             x = [0]
             while x[0] == 0:
@@ -120,6 +121,10 @@ class PrimalSimplex:
                 elif x[0] == 1:
                     self.x = x[1]
                     self.fx = sum([i * j for i,j in zip(self.x,self.c)])[0]
-                    print("Solução ótima:",self.x,"\nValor ótimo da solução:",self.fx)
+                    self.solucao = [1,"Solução ótima: " + str(self.x) + " Valor ótimo da solução: " + str(self.fx)]
                 elif x[0] == 2:
-                    print("Problema não possui solução ótima")
+                    self.solucao = [2,"Problema não possui solução ótima"]
+
+        print(self.solucao[1])
+
+        return self.solucao
