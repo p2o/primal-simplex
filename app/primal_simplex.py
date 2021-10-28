@@ -27,7 +27,7 @@ def simplexFii(matrizA,bases,naoBase,vetorC,vetorB):
         x_r = [0] * matrizA.shape[1]
         for i,j in enumerate(bases):
             x_r[j] = x[i][0]
-        return [1,x_r] #solução ótima
+        return [1,x_r,lamb,hat_c] #solução ótima
 
     # Passo 4: {cálculo da direção simplex}
     y = np.linalg.solve(B,N[:,hat_c_min_i])
@@ -36,7 +36,10 @@ def simplexFii(matrizA,bases,naoBase,vetorC,vetorB):
 
     # Se y <= 0, então PARE = VERDADE {problema não tem solução ótima finita}
     if max(y) <= 0:
-        return [2,x] #sem solução ótima finita
+        x_r = [0] * matrizA.shape[1]
+        for i,j in enumerate(bases):
+            x_r[j] = x[i][0]
+        return [2,x_r,lamb,hat_c,y] #sem solução ótima finita
 
     # Caso contrário, determine a variável a sair da base
     hat_epi = []
@@ -53,7 +56,11 @@ def simplexFii(matrizA,bases,naoBase,vetorC,vetorB):
     bases[hat_epi_min_i] = entra_na_base
     naoBase[hat_c_min_i] = sai_da_base
 
-    return [0,bases,naoBase]
+    x_r = [0] * matrizA.shape[1]
+    for i, j in enumerate(bases):
+        x_r[j] = x[i][0]
+
+    return [0,bases,naoBase,x_r,lamb,hat_c,y,[hat_epi_i,hat_epi],[entra_na_base,sai_da_base]]
 
 class PrimalSimplex:
 
